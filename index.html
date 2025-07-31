@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalized Recipe Generator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #c0392b;
+        }
+        #results {
+            margin-top: 30px;
+            display: none;
+        }
+        .recipe {
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+        }
+        .recipe:last-child {
+            border-bottom: none;
+        }
+        .recipe img {
+            max-width: 100%;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .loading {
+            text-align: center;
+            margin: 20px 0;
+            display: none;
+        }
+        .spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #e74c3c;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Personalized Recipe Generator</h1>
+        <p>Get food recommendations tailored to your body, lifestyle, and profession</p>
+        
+        <div class="form-group">
+            <label for="weight">Weight (kg)</label>
+            <input type="number" id="weight" placeholder="e.g. 70">
+        </div>
+        
+        <div class="form-group">
+            <label for="height">Height (cm)</label>
+            <input type="number" id="height" placeholder="e.g. 175">
+        </div>
+        
+        <div class="form-group">
+            <label for="age">Age</label>
+            <input type="number" id="age" placeholder="e.g. 30">
+        </div>
+        
+        <div class="form-group">
+            <label for="activity">Activity Level</label>
+            <select id="activity">
+                <option value="sedentary">Sedentary (little or no exercise)</option>
+                <option value="light">Lightly active (light exercise/sports 1-3 days/week)</option>
+                <option value="moderate">Moderately active (moderate exercise/sports 3-5 days/week)</option>
+                <option value="active">Very active (hard exercise/sports 6-7 days/week)</option>
+                <option value="extreme">Extremely active (very hard exercise & physical job)</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="profession">Profession Type</label>
+            <select id="profession">
+                <option value="desk">Desk Job</option>
+                <option value="physical">Physical Labor</option>
+                <option value="creative">Creative Work</option>
+                <option value="healthcare">Healthcare</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        
+        <button id="generate">Generate My Recipes</button>
+        
+        <div class="loading">
+            <div class="spinner"></div>
+            <p>Finding perfect recipes for you...</p>
+        </div>
+        
+        <div id="results"></div>
+    </div>
+    <script src="server.js"></script> <!-- Include your API key configuration -->
+    <script>
+        document.getElementById('generate').addEventListener('click', async function() {
+            // Get user inputs
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value);
+            const age = parseInt(document.getElementById('age').value);
+            const activity = document.getElementById('activity').value;
+            const profession = document.getElementById('profession').value;
+            
+            // Validate inputs
+            if (!weight || !height || !age) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            // Show loading spinner
+            document.querySelector('.loading').style.display = 'block';
+            document.getElementById('results').style.display = 'none';
+            
+            try {
+                // Calculate BMI and calorie needs
+                const bmi = weight / ((height/100) ** 2);
+                let calorieNeeds;
+                
+                // Harris-Benedict equation for basal metabolic rate (simplified)
+                let bmr;
+                if (profession === 'physical') {
+                    bmr = 10 * weight + 6.25 * height - 5 * age + 5 + 200;
+                } else {
+                    bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+                }
+                
+                // Adjust for activity level
+                switch(activity) {
+                    case 'sedentary': calorieNeeds = bmr * 1.2; break;
+                    case 'light': calorieNeeds = bmr * 1.375; break;
+                    case 'moderate': calorieNeeds = bmr * 1.55; break;
+                    case 'active': calorieNeeds = bmr * 1.725; break;
+                    case 'extreme': calorieNeeds = bmr * 1.9; break;
+                    default: calorieNeeds = bmr * 1.2;
+                }
+                
+                // Determine dietary focus based on inputs
+                let diet = '';
+                let intolerances = '';
+                
+                if (bmi > 25) {
+                    diet = 'low-carb';
+                } else if (bmi < 18.5) {
+                    diet = 'high-protein';
+                }
+                
+                if (age > 50) {
+                    intolerances = 'gluten,dairy';
+                }
+                
+                if (profession === 'healthcare') {
+                    diet = 'high-protein';
+                }
+                
+                // Call Spoonacular API
+                const apiKey = config.key; // Your API key
+                const url = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&number=5&addRecipeNutrition=true`;
+                
+                // Add parameters based on user profile
+                let finalUrl = url;
+                if (diet) finalUrl += `&diet=${diet}`;
+                if (intolerances) finalUrl += `&intolerances=${intolerances}`;
+                if (calorieNeeds) finalUrl += `&maxCalories=${Math.round(calorieNeeds/3)}`; // Per meal
+                
+                const response = await fetch(finalUrl);
+                const data = await response.json();
+                
+                // Display results
+                displayResults(data.results, calorieNeeds);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('results').innerHTML = `
+                    <div style="color: red; text-align: center;">
+                        <p>Failed to fetch recipes. Please try again later.</p>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+                document.getElementById('results').style.display = 'block';
+            } finally {
+                document.querySelector('.loading').style.display = 'none';
+            }
+        });
+        
+        function displayResults(recipes, dailyCalories) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+            
+            if (!recipes || recipes.length === 0) {
+                resultsDiv.innerHTML = '<p>No recipes found matching your criteria. Try adjusting your inputs.</p>';
+                resultsDiv.style.display = 'block';
+                return;
+            }
+            
+            resultsDiv.innerHTML += `
+                <h2>Your Personalized Recipes</h2>
+                <p>Based on your profile, we recommend these recipes (target: ${Math.round(dailyCalories)} calories/day)</p>
+            `;
+            
+            recipes.forEach(recipe => {
+                const recipeDiv = document.createElement('div');
+                recipeDiv.className = 'recipe';
+                
+                let nutritionInfo = '';
+                if (recipe.nutrition) {
+                    const nutrients = recipe.nutrition.nutrients;
+                    const calories = nutrients.find(n => n.name === 'Calories');
+                    const protein = nutrients.find(n => n.name === 'Protein');
+                    const carbs = nutrients.find(n => n.name === 'Carbohydrates');
+                    const fat = nutrients.find(n => n.name === 'Fat');
+                    
+                    if (calories && protein && carbs && fat) {
+                        nutritionInfo = `
+                            <p><strong>Nutrition per serving:</strong> 
+                            ${Math.round(calories.amount)} calories | 
+                            ${Math.round(protein.amount)}g protein | 
+                            ${Math.round(carbs.amount)}g carbs | 
+                            ${Math.round(fat.amount)}g fat</p>
+                        `;
+                    }
+                }
+                
+                recipeDiv.innerHTML = `
+                    <h3>${recipe.title}</h3>
+                    ${recipe.image ? `<img src="${recipe.image}" alt="${recipe.title}">` : ''}
+                    ${nutritionInfo}
+                    <p><a href="https://spoonacular.com/recipes/${recipe.title.toLowerCase().replace(/ /g, '-')}-${recipe.id}" target="_blank">View full recipe</a></p>
+                `;
+                
+                resultsDiv.appendChild(recipeDiv);
+            });
+            
+            resultsDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>>
