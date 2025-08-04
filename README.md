@@ -56,7 +56,7 @@ Detailed ingredient lists and measurements
 Step-by-step cooking instructions
 Thumbnail images for each recipe
 
-API Documentation: [The Spoonacular API Documentation](https://www.theSpoonacular.com/api.php)
+API Documentation: [The Spoonacular API Documentation](https://spoonacular.com/food-api/docs)
 
 6. LOCAL DEVELOPMENT SETUP
 
