@@ -1,41 +1,135 @@
-Recipe Generator App A Dockerized Web Application with Load Balancing
+ Recipe Generator Web Application
 
-This project is a Recipe Generator that fetches recipes from an external API (The MealDB) and displays them in a user-friendly web interface. It is containerized using Docker, deployed on two web servers (web-01 & web-02), and load-balanced using haproxy on lb-01.
+ Table of Contents
 
-📌 Features ✅ Fetches recipes from The MealDB API ✅ Search functionality to find recipes by name ✅ Responsive UI built with HTML, CSS, and JavaScript ✅ Dockerized for easy deployment ✅ Load-balanced across two backend servers
+ 1. OVERVIEW
 
-🚀 Deployment Architecture text User → [HAProxy Load Balancer (lb-01)] → [Web-01 (Docker Container)]
-↘→ [Web-02 (Docker Container)] 📦 Docker Hub Image 🔗 Repository: https://hub.docker.com/r/innocent2/recipe-generator 📌 Tags: v1, latest
+The Recipe Generator is a web application that helps users discover and explore recipes from around the world. The application provides an intuitive interface to search, filter, and browse recipes from The MealDB API, complete with detailed instructions, ingredients, and meal categories.
 
-🔧 Setup & Deployment 1️⃣ Build the Docker Image Locally sh docker build -t innocent2/recipe-generator:v1 . 2️⃣ Test Locally sh docker run -p 8080:8080 innocent2/recipe-generator:v1 Verify:
+Note: This application is intended for educational purposes and recipe inspiration. Always verify food allergies and dietary requirements before preparing any recipes.
 
-sh curl http://localhost:8080
+ 2. FEATURES
 
-or open in browser: http://localhost:8080
-3️⃣ Push to Docker Hub sh docker login docker push innocent2/recipe-generator:v1 🖥️ Deploy on Web Servers (web-01 & web-02) SSH into each server and run: sh docker pull innocent2/recipe-generator:v1 docker run -d --name app --restart unless-stopped -p 8080:8080 innocent2/recipe-generator:v1 Verify:
+ 2.1 Comprehensive Recipe Database
+Access to hundreds of recipes with detailed information
+Categorised by meal type, cuisine, and main ingredients
+ Real-time recipe data from The MealDB API
 
-sh curl http://web-01:8080 # Should return the app curl http://web-02:8080 # Should return the app ⚖️ Configure Load Balancer (lb-01) Update HAProxy Config (/etc/haproxy/haproxy.cfg) sh backend webapps balance roundrobin server web01 172.20.0.11:8080 check server web02 172.20.0.12:8080 check Reload HAProxy sh docker exec -it lb-01 sh -c 'haproxy -sf $(pidof haproxy) -f /etc/haproxy/haproxy.cfg' ✅ Testing Load Balancing Run multiple requests to see traffic distributed:
+ 2.2 Advanced Search and Filtering
+Search functionality by recipe name
+ Filter by category (vegetarian, vegan, desserts, etc.)
+ Dynamic search results with instant updates
 
-sh curl http://localhost # (or the exposed lb-01 port) Expected Result: Responses alternate between web-01 and web-02.
+2.3 Interactive Recipe Cards
+Detailed recipe information display
+ Expandable modal views for complete recipe details
+ Ingredient lists with measurements
 
-🔒 Security Note (Optional Bonus) To avoid hardcoding API keys in the Docker image:
+2.4 User Experience Features
+Responsive design for all devices
+Clean, intuitive interface
+ Loading states and error handling
+ Accessibility-focused design
 
-Use environment variables:
+ 3. DEMO
 
-sh docker run -d -e API_KEY=your_key --name app -p 8080:8080 innocent2/recipe-generator:v1 Or use Docker Secrets / Kubernetes ConfigMaps in production.
 
-📜 API Reference 🔗 The MealDB API Documentation
+3.1 YOUTUBE LINK
+YouTube link: Click here to see how the video on Youtube
 
-📹 Demo Video 🎥 Watch the Demo (Not exceeding 2 minutes)
+3.2 GITHUB LINK
+Live application URL: This is my app running online. Click it to access my live app
 
-📝 Final Notes No API keys are exposed in the repository (handled via .gitignore).
+ 4. TECHNOLOGIES USED
 
-Tested on Docker with HAProxy for seamless load balancing.
+Frontend: HTML5, CSS3, JavaScript
+API Integration: The MealDB API
+Containerization: Docker
+Load Balancing: HAProxy
+Deployment: Nginx web servers
 
-Future improvements: Caching, user authentication, and more recipe filters.
+5. API INTEGRATION
 
-🌟 Happy Cooking! 🍳🚀
+The application integrates with The MealDB API to access a comprehensive database of recipes. This API provides:
+Complete recipe information, including names, categories, and regions
+Detailed ingredient lists and measurements
+Step-by-step cooking instructions
+Thumbnail images for each recipe
 
-Developed by Nkurunziza Innocent 🔗 GitHub: https://github.com/innocent-gift 📧 Email: i.nkurunziza@alustudent.com
+API Documentation: [The MealDB API Documentation](https://www.themealdb.com/api.php)
 
-This README.md is clear, structured, and reproducible, ensuring smooth grading. 🚀 Let me know if you'd like any refinements! create this readme to look like steven's readme i gave you
+6. LOCAL DEVELOPMENT SETUP
+
+Follow these steps to set up the project locally:
+
+Type this code: git clone https://github.com/innocent-gift/RECIPIEAPP.git
+
+ 7. DEPLOYMENT
+
+7.1 Prerequisites
+- Two web servers (web-01 and web-02) with Docker installed
+- Load balancer (lb-01) with HAProxy installed
+
+ 7.2 Docker Deployment
+
+Docker Hub Images:
+Web Servers: `docker pull innocent2/RECIEPIEAPP:v1`
+ Load Balancer: Custom HAProxy configuration
+
+ Build Images Locally:
+```bash
+docker build -t innocent2/RECIEPIEAPP:v1 .
+```
+
+ Run Containers:
+```bash
+docker run -d --name app --restart unless-stopped -p 8080:8080 innocent2/RECIEPIEAPP:v1
+```
+
+ Load Balancer Configuration:
+Update `/etc/haproxy/haproxy.cfg`:
+```text
+backend webapps
+    balance round robin
+    server web01 172.20.0.11:8080 check
+    server web02 172.20.0.12:8080 check
+```
+
+Reload HAProxy:
+```bash
+docker exec -it lb-01 sh -c 'haproxy -sf $(pidof haproxy) -f /etc/haproxy/haproxy.cfg'
+```
+
+Testing:
+Verify load balancing by running:
+```bash
+curl http://localhost
+```
+
+Responses should alternate between
+
+ 8. CHALLENGES AND SOLUTIONS
+
+API Rate Limiting: The free tier of The Spoonacular API has limitations. Implemented client-side caching to reduce API calls.
+
+Security: Avoided hardcoding API keys by using environment variables:
+```bash
+docker run -d -e API_KEY=your_key --name app -p 8080:8080 innocent2/recipe-generator:v1
+```
+
+ 9. CREDITS AND ACKNOWLEDGMENTS
+
+API Used: The MealDB API
+Infrastructure: ALX Africa program
+Docker Community for excellent documentation
+
+
+
+
+
+
+Developed by Nkurunziza Innocent  
+🔗 GitHub: [https://github.com/innocent-gift](https://github.com/innocent-gift)  
+📧 Email: i.nkurunziza@alustudent.com  
+🌐 Portfolio: [https://innocent-gift.github.io](https://innocent-gift.github.io)
+
