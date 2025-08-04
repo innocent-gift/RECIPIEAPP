@@ -4,7 +4,7 @@
 
  1. OVERVIEW
 
-The Recipe Generator is a web application that helps users discover and explore recipes from around the world. The application provides an intuitive interface to search, filter, and browse recipes from The MealDB API, complete with detailed instructions, ingredients, and meal categories.
+The Recipe Generator is a web application that helps users discover and explore recipes from around the world. The application provides an intuitive interface to search, filter, and browse recipes from The Spoonacular API, complete with detailed instructions, ingredients, and meal categories.
 
 Note: This application is intended for educational purposes and recipe inspiration. Always verify food allergies and dietary requirements before preparing any recipes.
 
@@ -13,7 +13,7 @@ Note: This application is intended for educational purposes and recipe inspirati
  2.1 Comprehensive Recipe Database
 Access to hundreds of recipes with detailed information
 Categorised by meal type, cuisine, and main ingredients
- Real-time recipe data from The MealDB API
+  recipe data from The Spoonacular API
 
  2.2 Advanced Search and Filtering
 Search functionality by recipe name
@@ -43,20 +43,20 @@ Live application URL: https://github.com/innocent-gift/RECIPIEAPP.git
  4. TECHNOLOGIES USED
 
 Frontend: HTML5, CSS3, JavaScript
-API Integration: The MealDB API
+API Integration: The Spoonacular API
 Containerization: Docker
 Load Balancing: HAProxy
 Deployment: Nginx web servers
 
 5. API INTEGRATION
 
-The application integrates with The MealDB API to access a comprehensive database of recipes. This API provides:
+The application integrates with the Spoonacular API to access a comprehensive database of recipes. This API provides:
 Complete recipe information, including names, categories, and regions
 Detailed ingredient lists and measurements
 Step-by-step cooking instructions
 Thumbnail images for each recipe
 
-API Documentation: [The MealDB API Documentation](https://www.themealdb.com/api.php)
+API Documentation: [The Spoonacular API Documentation](https://www.theSpoonacular.com/api.php)
 
 6. LOCAL DEVELOPMENT SETUP
 
@@ -99,7 +99,7 @@ docker run -d -e API_KEY=your_key --name app -p 8080:8080 innocent2/recipe-gener
 
  9. CREDITS AND ACKNOWLEDGMENTS
 
-API Used: The MealDB API
+API Used: The Spoonacular API
 Infrastructure: ALX Africa program
 Docker Community for excellent documentation
 
