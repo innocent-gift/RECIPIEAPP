@@ -105,6 +105,7 @@ Verify load balancing by running:
 ```bash
 curl http://localhost
 ```
+<img width="578" height="261" alt="image" src="https://github.com/user-attachments/assets/6eba33ba-145e-4ae4-8936-938f6d2b03a0" />
 
 Responses should alternate between
 
