@@ -38,7 +38,7 @@ Clean, intuitive interface
 YouTube link: https://www.youtube.com/watch?v=CoIItWS_EgQ
 
 3.2 GITHUB LINK
-Live application URL: https://github.com/innocent-gift/RECIPIEAPP.git
+Live application URL: https://innocent-gift.github.io/RECIPIEAPP/
 
  4. TECHNOLOGIES USED
 
@@ -62,9 +62,16 @@ API Documentation: [The Spoonacular API Documentation](https://www.theSpoonacula
 
 Follow these steps to set up the project locally:
 
-Type this code: git clone https://github.com/innocent-gift/RECIPIEAPP.git
-
- 7. DEPLOYMENT
+Type this code: 
+```
+git clone https://github.com/innocent-gift/RECIPIEAPP.git
+```
+then move in the directory called RECIPIEAPP
+```
+cd RECIPIEAPP 
+```
+then open index.html in the browser
+7. DEPLOYMENT
 
 7.1 Prerequisites
 - Two web servers (web-01 and web-02) with Docker installed
