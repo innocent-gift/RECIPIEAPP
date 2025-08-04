@@ -76,29 +76,7 @@ Docker Hub Images:
 Web Servers: `docker pull innocent2/RECIEPIEAPP:v1`
  Load Balancer: Custom HAProxy configuration
 
- Build Images Locally:
-```bash
-docker build -t innocent2/RECIEPIEAPP:v1 .
-```
-
- Run Containers:
-```bash
-docker run -d --name app --restart unless-stopped -p 8080:8080 innocent2/RECIEPIEAPP:v1
-```
-
- Load Balancer Configuration:
-Update `/etc/haproxy/haproxy.cfg`:
-```text
-backend webapps
-    balance round robin
-    server web01 172.20.0.11:8080 check
-    server web02 172.20.0.12:8080 check
-```
-
-Reload HAProxy:
-```bash
-docker exec -it lb-01 sh -c 'haproxy -sf $(pidof haproxy) -f /etc/haproxy/haproxy.cfg'
-```
+ From the image below, you can see that all servers are running and the load balancer is balancing the servers well check it there in tesing them.
 
 Testing:
 Verify load balancing by running:
