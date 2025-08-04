@@ -35,10 +35,10 @@ Clean, intuitive interface
 
 
 3.1 YOUTUBE LINK
-YouTube link: Click here to see how the video on Youtube
+YouTube link: https://www.youtube.com/watch?v=CoIItWS_EgQ
 
 3.2 GITHUB LINK
-Live application URL: This is my app running online. Click it to access my live app
+Live application URL: https://github.com/innocent-gift/RECIPIEAPP.git
 
  4. TECHNOLOGIES USED
 
